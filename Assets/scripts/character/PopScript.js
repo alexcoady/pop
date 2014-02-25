@@ -16,7 +16,11 @@ function FixedUpdate () {
 	
 	if( Input.GetKeyDown(KeyCode.Space) && jumping == false ) {
 		
-		Debug.Log("Jump!");
-		rigidbody2D.velocity.y = rigidbody2D.gravityScale * jumpScale;
+		Hop();
 	}
+}
+
+function Hop () {
+
+	rigidbody2D.velocity.y = rigidbody2D.gravityScale * jumpScale;
 }
