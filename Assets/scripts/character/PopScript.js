@@ -19,14 +19,13 @@ function Update () {
 
 	// If gyroscope is available, use that mudda
 	if ( SystemInfo.supportsGyroscope ) {
-		
-		Debug.Log("Supports gyroscope");
-		
-	    move = Input.acceleration.x * 2;
+				
+	    move = Input.acceleration.x;
+	    // Speed this interaction up a bit
+	    move *= 2;
 	    		
 	} else {
 	
-		Debug.Log("Does not support gyroscope");
 		move = Input.GetAxis("Horizontal");
 	}
 

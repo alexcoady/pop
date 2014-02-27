@@ -108,7 +108,23 @@ function DrawRow () {
 		}
 	
 		posX = (i+1) * gridItemWidth - (gridItemWidth / 2) - camWidth / 2;
-		Instantiate( defaultBalloons[Random.Range(0, defaultBalloons.length)], new Vector3(posX, nextY, 0f), Quaternion.identity );
+		
+		var balloon: Object;
+		var rand = Random.Range(0f, 10f);
+		
+		if ( rand > 5 ) {
+		
+			balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
+		
+		} else if ( rand > 3 ) {
+		
+			balloon = singleUseBalloons[Random.Range(0, defaultBalloons.length)];
+		} else {
+		
+			balloon = trapBalloons[Random.Range(0, defaultBalloons.length)];
+		}
+		
+		Instantiate( balloon, new Vector3(posX, nextY, 0f), Quaternion.identity );
 
 		Debug.DrawLine (new Vector3(posX, nextY, -10f), new Vector3(posX, nextY+1, -10f), Color.red);
 		

@@ -1,10 +1,10 @@
 ﻿#pragma strict
 
 var isMovingThroughBalloon: boolean = false;
+var isSingle:boolean = false;
+var isTrap:boolean = false;
 
 function OnTriggerEnter2D (hit: Collider2D) {
-
-	Debug.Log(hit.tag);
 
 	if ( hit.CompareTag("Player") ) {
 	
@@ -20,8 +20,17 @@ function OnTriggerEnter2D (hit: Collider2D) {
 			return;
 		}
 		
+		if ( isTrap ) {
+			Destroy( this.gameObject );
+			return;
+		}
+		
 		// If player is moving downwards/still, jump on balloon
 		hit.gameObject.BroadcastMessage("Hop");
+		
+		if (isSingle) {
+			Destroy( this.gameObject );
+		}
 	}
 }
 
