@@ -3,6 +3,7 @@
 // Main game camera
 var cam: Camera;
 private var camWidth:float;
+private var camY:float = 0;
 
 // Balloon objects to be spawned
 var defaultBalloons: GameObject[];
@@ -56,6 +57,8 @@ function Start () {
 	// Calculate the x position for the grid
 	camWidth = cam.ScreenToWorldPoint( new Vector3( Screen.width, 0f, 0f ) ).x * 2;
 	
+	camY = cam.transform.position.y;
+	
 	gridItemWidth = camWidth / gridPerRow;
 		
 	Debug.DrawLine (new Vector3(camWidth, 0f, -10f), new Vector3(camWidth, 1f, -10f), Color.blue);
@@ -63,6 +66,15 @@ function Start () {
 	
 	// Draw initial balloon row
 	DrawStartRows();
+}
+
+function FixedUpdate () {
+	
+	if (cam.transform.position.y - 2 >= camY) {
+	
+		DrawRow();
+		camY = cam.transform.position.y;
+	}
 }
 
 function DrawStartRows() {

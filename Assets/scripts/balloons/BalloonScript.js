@@ -8,8 +8,8 @@ function OnTriggerEnter2D (hit: Collider2D) {
 
 	if ( hit.CompareTag("Player") ) {
 	
-		Debug.Log("Player hit balloon");
-	
+		hit.BroadcastMessage("RecordHeight");
+
 		// If player is moving upwards, ignore collision
 		if ( hit.gameObject.rigidbody2D.velocity.y > 0 ) {
 			isMovingThroughBalloon = true;
