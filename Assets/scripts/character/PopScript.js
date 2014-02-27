@@ -4,9 +4,8 @@ var maxSpeed:float = 10;
 var jumpScale:float = 6;
 var height:int = 0;
 
-var errX:float = 0;
-var errY:float = 0;
-var errZ:float = 0;
+var scoreSkin: GUISkin;
+
 
 function Start () {
 
@@ -40,4 +39,11 @@ function Hop () {
 function RecordHeight () {
 
 	height = Mathf.Ceil( transform.position.y );
+}
+
+function OnGUI () {
+
+	GUI.skin = scoreSkin;
+	
+	GUI.Label( new Rect( Screen.width - 150, 10, 140, 140 ), '' + height );
 }

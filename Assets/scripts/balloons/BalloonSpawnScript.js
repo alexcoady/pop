@@ -42,7 +42,13 @@ private var hardBalloonsMax:float	= 0.8f;
 private var modeBalloonsMin:float	= 0f;
 private var modeBalloonsMax:float	= 1f;
 
+function Awake () {
+
+	Application.targetFrameRate = 60;
+}
+
 function Start () {
+
 
 	// Ensure next y value is correct to configurable
 	// start and gap variables
@@ -80,7 +86,6 @@ function FixedUpdate () {
 function DrawStartRows() {
 
 	for (var i:int = 0; i < startRowCount; i += 1) {
-	
 		DrawRow();
 	}
 }
@@ -88,11 +93,10 @@ function DrawStartRows() {
 function DrawRow () {
 
 	var posX:float;
-	
 	var min:int = Mathf.CeilToInt( modeBalloonsMin * gridPerRow );
 	var max:int = Mathf.CeilToInt( modeBalloonsMax * gridPerRow );	
-	
 	var toDraw:int = Random.Range(min, max);
+	var isPossible:boolean = false;
 			
 	for (var i:int = 0; i < gridPerRow; i += 1) {
 	
@@ -112,16 +116,28 @@ function DrawRow () {
 		var balloon: Object;
 		var rand = Random.Range(0f, 10f);
 		
-		if ( rand > 5 ) {
+		// If the row is currently impossible and there's one balloon left - make it possible
+		if ( !isPossible && i + 1 == toDraw ) {
+		
+			if ( rand > 5 ) {
+				balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
+			} else {
+				balloon = singleUseBalloons[Random.Range(0, singleUseBalloons.length)];
+			}
+			
+		} else if ( rand > 5 ) {
 		
 			balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
+			isPossible = true;
 		
 		} else if ( rand > 3 ) {
 		
-			balloon = singleUseBalloons[Random.Range(0, defaultBalloons.length)];
+			balloon = singleUseBalloons[Random.Range(0, singleUseBalloons.length)];
+			isPossible = true;
+		
 		} else {
 		
-			balloon = trapBalloons[Random.Range(0, defaultBalloons.length)];
+			balloon = trapBalloons[Random.Range(0, trapBalloons.length)];
 		}
 		
 		Instantiate( balloon, new Vector3(posX, nextY, 0f), Quaternion.identity );
