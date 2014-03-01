@@ -101,7 +101,7 @@ function DrawRow () {
 	for (var i:int = 0; i < gridPerRow; i += 1) {
 	
 		// Break loop if enough balloons have been drawn
-		if (!toDraw) break;
+		if (toDraw == 0) break;
 		
 		// If we can afford to leave a gap, maybe leave one
 		if ((gridPerRow - i) > toDraw) {
@@ -117,7 +117,7 @@ function DrawRow () {
 		var rand = Random.Range(0f, 10f);
 		
 		// If the row is currently impossible and there's one balloon left - make it possible
-		if ( !isPossible && i + 1 == toDraw ) {
+		if ( !isPossible && toDraw == 1 ) {
 		
 			if ( rand > 5 ) {
 				balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
@@ -140,6 +140,10 @@ function DrawRow () {
 			balloon = trapBalloons[Random.Range(0, trapBalloons.length)];
 		}
 		
+		if (toDraw == 1) {
+			Debug.Log("Row is " + (isPossible ? "possible" : "impossible"));
+		}
+						
 		Instantiate( balloon, new Vector3(posX, nextY, 0f), Quaternion.identity );
 
 		Debug.DrawLine (new Vector3(posX, nextY, -10f), new Vector3(posX, nextY+1, -10f), Color.red);
