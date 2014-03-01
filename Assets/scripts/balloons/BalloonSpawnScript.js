@@ -76,7 +76,7 @@ function Start () {
 
 function FixedUpdate () {
 	
-	if (cam.transform.position.y - 2 >= camY) {
+	if (cam.transform.position.y - gapY >= camY) {
 	
 		DrawRow();
 		camY = cam.transform.position.y;
