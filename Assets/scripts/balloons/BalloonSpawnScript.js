@@ -11,18 +11,18 @@ var singleUseBalloons: GameObject[];
 var trapBalloons: GameObject[];
 
 // Number of balloons possible on a row
-var gridPerRow: int 		= 6;
+private var gridPerRow: int 		= 6;
 private var gridItemWidth:float;
 
 // Y position of starting row
-var startY: float 			= -5;
-var startRowCount: int		= 5;
+private var startY: float 			= -5;
+private var startRowCount: int		= 6;
 
 // Y distance between rows
 // TODO: Make random from a range
 private var gapY: float;
-var gapYMin:float			= 2.2;
-var gapYMax:float			= 2.8;
+private var gapYMin:float			= 2;
+private var gapYMax:float			= 2.9;
 	
 // Y value for the next row to be generated 
 // (updated each time a new row is added to the scene)
@@ -31,18 +31,11 @@ private var nextY: float	= 0;
 // Array of x positions corresponding to calculated grid
 private var gridX: float[];
 
-// Amount of balloons to show per row
-private var easyBalloonsMin:float 	= 0.4f;
-private var easyBalloonsMax:float	= 1f;
+private var balloonsMin:float	= .6f;
+private var balloonsMax:float	= 1f;
 
-private var mediumBalloonsMin:float = 0.5f;
-private var mediumBalloonsMax:float	= 0.8f;
-
-private var hardBalloonsMin:float 	= 0.5f;
-private var hardBalloonsMax:float	= 0.8f;
-
-private var modeBalloonsMin:float	= 0f;
-private var modeBalloonsMax:float	= 1f;
+var difficulty: float = 1;
+var difficultyMax:float = 5;
 
 function Awake () {
 
@@ -55,12 +48,6 @@ function Start () {
 	// Ensure next y value is correct to configurable
 	// start and gap variables
 	nextY = startY + gapY;
-	
-	// Start game off on easy mode
-	// TODO: Make more flexible than 3 settings perhaps
-	// TODO: Update different variables to increase difficulty (ie: gap)
-	modeBalloonsMin = easyBalloonsMin;
-	modeBalloonsMax = easyBalloonsMax;
 	
 	// Calculate the x position for the grid
 	camWidth = cam.ScreenToWorldPoint( new Vector3( Screen.width, 0f, 0f ) ).x * 2;
@@ -88,6 +75,24 @@ function FixedUpdate () {
 		DrawRow();
 		camY += gapY;
 	}
+	
+	difficulty += (difficulty >= difficultyMax ? 0 : 0.001);
+	
+	if (difficulty >= 5) {
+	
+		balloonsMin = 0.1f;
+		balloonsMax = 0.3f;
+	
+	} else if (difficulty > 3) {
+	
+		balloonsMin -= 0.2f;
+		balloonsMax -= 0.2f;
+	
+	} else if (difficulty > 2) {
+	
+		balloonsMin -= 0.2f;
+		balloonsMax -= 0.2f;
+	}
 }
 
 function DrawStartRows() {
@@ -100,9 +105,9 @@ function DrawStartRows() {
 function DrawRow () {
 
 	var posX:float;
-	var min:int = Mathf.CeilToInt( modeBalloonsMin * gridPerRow );
-	var max:int = Mathf.CeilToInt( modeBalloonsMax * gridPerRow );	
-	var toDraw:int = Random.Range(min, max);
+	var min:int = Mathf.CeilToInt( balloonsMin * gridPerRow );
+	var max:int = Mathf.CeilToInt( balloonsMax * gridPerRow );	
+	var toDraw:int = Mathf.MaxValue(Random.Range(min, max), 1); // Ensures always at least 1
 	var isPossible:boolean = false;
 			
 	for (var i:int = 0; i < gridPerRow; i += 1) {
