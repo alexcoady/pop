@@ -24,17 +24,13 @@ private var gapYMin:float			= 2;
 private var gapYMax:float			= 2.9;
 	
 // Y value for the next row to be generated 
-// (updated each time a new row is added to the scene)
 private var nextY: float	= 0;
-
-// Array of x positions corresponding to calculated grid
-private var gridX: float[];
 
 private var balloonsMin: float[]	= [0.8, 0.6, 0.4, 0.4, 0.0];
 private var balloonsMax: float[]	= [1.0, 1.0, 0.8, 0.4, 0.4];
 
-private var difficulty: int = 0;
-private var difficultyMax:int = 4;
+private var difficulty: int 	= 0;
+private var difficultyMax:int 	= 4;
 
 private var difficultyTriggers: int[] = [100, 150, 200, 230, 300];
 
@@ -95,7 +91,7 @@ function DrawStartRows() {
 function DrawRow () {
 
 	var posX:float;
-	var min:int = Mathf.CeilToInt( balloonsMin[difficulty] * gridPerRow );
+	var min:int = Mathf.FloorToInt( balloonsMin[difficulty] * gridPerRow );
 	var max:int = Mathf.CeilToInt( balloonsMax[difficulty] * gridPerRow );	
 	var toDraw:int = Mathf.Max(Random.Range(min, max), 1); // Ensures always at least 1
 	var isPossible:boolean = false;
@@ -108,7 +104,16 @@ function DrawRow () {
 		// If we can afford to leave a gap, maybe leave one
 		if ((gridPerRow - i) > toDraw) {
 		
-			if ( Random.Range(0f, 1f) > 0.5 ) {
+// 			How many spaces are left?
+//			toDraw = number left to draw
+//			gridPerRow = total number possible
+//			i = number out of total we're at
+//			gridPerRow - i = available spaces
+			
+//			6 - 2 = 4 spaces left
+//			1 / 4 = 0.25
+		
+			if ( Random.Range(0f, 1f) > ( 1f / (gridPerRow - (i + 1)) ) ) {
 				continue;
 			}
 		}
