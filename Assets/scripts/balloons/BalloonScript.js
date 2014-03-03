@@ -13,6 +13,10 @@ function OnTriggerEnter2D (hit: Collider2D) {
 		// If player is moving upwards, ignore collision
 		if ( hit.gameObject.rigidbody2D.velocity.y > 0 ) {
 			isMovingThroughBalloon = true;
+			
+			if ( isTrap ) {
+				Destroy( this.gameObject );
+			}
 			return;
 		}
 		

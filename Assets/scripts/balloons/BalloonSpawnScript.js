@@ -20,7 +20,9 @@ var startRowCount: int		= 5;
 
 // Y distance between rows
 // TODO: Make random from a range
-var gapY: float 			= 2;
+private var gapY: float;
+var gapYMin:float			= 2.2;
+var gapYMax:float			= 2.8;
 	
 // Y value for the next row to be generated 
 // (updated each time a new row is added to the scene)
@@ -49,7 +51,7 @@ function Awake () {
 
 function Start () {
 
-
+	GenerateGapY();
 	// Ensure next y value is correct to configurable
 	// start and gap variables
 	nextY = startY + gapY;
@@ -74,12 +76,17 @@ function Start () {
 	DrawStartRows();
 }
 
+function GenerateGapY() {
+
+	gapY = Random.Range( gapYMin, gapYMax );
+}
+
 function FixedUpdate () {
 	
 	if (cam.transform.position.y - gapY >= camY) {
 	
 		DrawRow();
-		camY = cam.transform.position.y;
+		camY += gapY;
 	}
 }
 
@@ -119,6 +126,8 @@ function DrawRow () {
 		// If the row is currently impossible and there's one balloon left - make it possible
 		if ( !isPossible && toDraw == 1 ) {
 		
+			Debug.Log("Row is impossible, make possible now");	
+		
 			if ( rand > 5 ) {
 				balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
 			} else {
@@ -139,15 +148,12 @@ function DrawRow () {
 		
 			balloon = trapBalloons[Random.Range(0, trapBalloons.length)];
 		}
-		
-		if (toDraw == 1) {
-			Debug.Log("Row is " + (isPossible ? "possible" : "impossible"));
-		}
 						
 		Instantiate( balloon, new Vector3(posX, nextY, 0f), Quaternion.identity );
 
 		Debug.DrawLine (new Vector3(posX, nextY, -10f), new Vector3(posX, nextY+1, -10f), Color.red);
 		
+		GenerateGapY();
 		toDraw--;
 	}
 
