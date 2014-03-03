@@ -38,7 +38,7 @@ function Hop () {
 
 function RecordHeight () {
 
-	height = Mathf.Ceil( transform.position.y );
+	height = Mathf.Max( Mathf.Ceil( transform.position.y ), height );
 }
 
 function OnGUI () {

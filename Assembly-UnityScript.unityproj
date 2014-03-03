@@ -51,7 +51,6 @@
      <Compile Include="Assets\scripts\camera\CameraFollowScript.js" />
      <Compile Include="Assets\scripts\character\PopScript.js" />
      <Compile Include="Assets\scripts\gameover\GameOverScript.js" />
-     <Compile Include="Assets\scripts\iPhoneGyroCam.js" />
      <Compile Include="Assets\scripts\walls\BottomWallScript.js" />
      <Compile Include="Assets\scripts\walls\WallSetupScript.js" />
   </ItemGroup>
