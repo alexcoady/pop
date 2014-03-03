@@ -19,7 +19,6 @@ private var startY: float 			= -5;
 private var startRowCount: int		= 6;
 
 // Y distance between rows
-// TODO: Make random from a range
 private var gapY: float;
 private var gapYMin:float			= 2;
 private var gapYMax:float			= 2.9;
@@ -31,11 +30,13 @@ private var nextY: float	= 0;
 // Array of x positions corresponding to calculated grid
 private var gridX: float[];
 
-private var balloonsMin:float	= .6f;
-private var balloonsMax:float	= 1f;
+private var balloonsMin: float[]	= [0.8, 0.6, 0.4, 0.4, 0.0];
+private var balloonsMax: float[]	= [1.0, 1.0, 0.8, 0.4, 0.4];
 
-var difficulty: float = 1;
-var difficultyMax:float = 5;
+private var difficulty: int = 0;
+private var difficultyMax:int = 4;
+
+private var difficultyTriggers: int[] = [100, 150, 200, 230, 300];
 
 function Awake () {
 
@@ -76,23 +77,12 @@ function FixedUpdate () {
 		camY += gapY;
 	}
 	
-	difficulty += (difficulty >= difficultyMax ? 0 : 0.001);
+	// Difficulty stuff
+	if ( cam.transform.position.y > difficultyTriggers[ difficulty ] ) {
 	
-	if (difficulty >= 5) {
-	
-		balloonsMin = 0.1f;
-		balloonsMax = 0.3f;
-	
-	} else if (difficulty > 3) {
-	
-		balloonsMin -= 0.2f;
-		balloonsMax -= 0.2f;
-	
-	} else if (difficulty > 2) {
-	
-		balloonsMin -= 0.2f;
-		balloonsMax -= 0.2f;
+		difficulty += ( difficulty < difficultyMax ? 1 : 0 );
 	}
+	
 }
 
 function DrawStartRows() {
@@ -105,9 +95,9 @@ function DrawStartRows() {
 function DrawRow () {
 
 	var posX:float;
-	var min:int = Mathf.CeilToInt( balloonsMin * gridPerRow );
-	var max:int = Mathf.CeilToInt( balloonsMax * gridPerRow );	
-	var toDraw:int = Mathf.MaxValue(Random.Range(min, max), 1); // Ensures always at least 1
+	var min:int = Mathf.CeilToInt( balloonsMin[difficulty] * gridPerRow );
+	var max:int = Mathf.CeilToInt( balloonsMax[difficulty] * gridPerRow );	
+	var toDraw:int = Mathf.Max(Random.Range(min, max), 1); // Ensures always at least 1
 	var isPossible:boolean = false;
 			
 	for (var i:int = 0; i < gridPerRow; i += 1) {
@@ -144,7 +134,7 @@ function DrawRow () {
 			balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
 			isPossible = true;
 		
-		} else if ( rand > 3 ) {
+		} else if ( rand > 1 ) {
 		
 			balloon = singleUseBalloons[Random.Range(0, singleUseBalloons.length)];
 			isPossible = true;
