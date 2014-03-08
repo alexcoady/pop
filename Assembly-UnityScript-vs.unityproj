@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\scripts\PowerupManagerScript.js" />
      <Compile Include="Assets\scripts\balloons\BalloonScript.js" />
      <Compile Include="Assets\scripts\balloons\BalloonSpawnScript.js" />
      <Compile Include="Assets\scripts\camera\CameraFollowScript.js" />

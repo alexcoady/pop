@@ -1,8 +1,11 @@
 ﻿#pragma strict
 
-var isMovingThroughBalloon: boolean = false;
+private var isMovingThroughBalloon: boolean = false;
 var isSingle:boolean = false;
 var isTrap:boolean = false;
+var isGolden:boolean = false;
+
+var anim:Animator;
 
 function OnTriggerEnter2D (hit: Collider2D) {
 
@@ -29,6 +32,10 @@ function OnTriggerEnter2D (hit: Collider2D) {
 			return;
 		}
 		
+		if ( isGolden ) {
+			PowerupManagerScript.GoldenBalloon();
+		}
+		
 		// If player is moving downwards/still, jump on balloon
 		hit.gameObject.BroadcastMessage("Hop");
 		
@@ -38,7 +45,31 @@ function OnTriggerEnter2D (hit: Collider2D) {
 	}
 }
 
+function Start () {
+
+	anim = GetComponent("Animator");
+}
+
 function OnTriggerExit2D () {
 
 	isMovingThroughBalloon = false;
+}
+
+function PowerupGolden() {
+
+	anim.SetBool("isGolden", true);
+	isTrap = false;
+	isSingle = false;
+}
+
+static function PowerupGoldenBalloons () {
+	// Send a message to every balloon
+	var balloons = GameObject.FindGameObjectsWithTag("Balloon");
+	
+	for (var i = 0; i < balloons.length; i++) {
+	
+		balloons[i].BroadcastMessage("PowerupGolden");
+	}
+	
+	
 }

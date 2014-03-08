@@ -9,6 +9,12 @@ private var camY:float = 0;
 var defaultBalloons: GameObject[];
 var singleUseBalloons: GameObject[];
 var trapBalloons: GameObject[];
+var specialBalloons: GameObject[];
+
+var goldenBalloon: GameObject;
+
+static var goldenRowCount: int = 5;
+private static var goldenRows: int = 0;
 
 // Number of balloons possible on a row
 private var gridPerRow: int 		= 6;
@@ -56,7 +62,7 @@ function Start () {
 	Debug.DrawLine (new Vector3(camWidth, 0f, -10f), new Vector3(camWidth, 1f, -10f), Color.blue);
 	Debug.DrawLine (new Vector3(-camWidth, 0f, -10f), new Vector3(-camWidth, 1f, -10f), Color.blue);
 	
-	// Draw initial balloon row
+	// Draw first balloon rows
 	DrawStartRows();
 }
 
@@ -78,7 +84,6 @@ function FixedUpdate () {
 	
 		difficulty += ( difficulty < difficultyMax ? 1 : 0 );
 	}
-	
 }
 
 function DrawStartRows() {
@@ -123,9 +128,12 @@ function DrawRow () {
 		var balloon: Object;
 		var rand = Random.Range(0f, 10f);
 		
-		// If the row is currently impossible and there's one balloon left - make it possible
-		if ( !isPossible && toDraw == 1 ) {
+		if ( goldenRows ) {
 		
+			balloon = goldenBalloon;
+		
+		} else if ( !isPossible && toDraw == 1 ) {
+			// If the row is currently impossible and there's one balloon left - make it possible
 			Debug.Log("Row is impossible, make possible now");	
 		
 			if ( rand > 5 ) {
@@ -139,9 +147,14 @@ function DrawRow () {
 			balloon = defaultBalloons[Random.Range(0, defaultBalloons.length)];
 			isPossible = true;
 		
-		} else if ( rand > 1 ) {
+		} else if ( rand > 2 ) {
 		
 			balloon = singleUseBalloons[Random.Range(0, singleUseBalloons.length)];
+			isPossible = true;
+		
+		} else if (rand > 1.9) {
+		
+			balloon = specialBalloons[Random.Range(0, specialBalloons.length)];
 			isPossible = true;
 		
 		} else {
@@ -156,7 +169,17 @@ function DrawRow () {
 		GenerateGapY();
 		toDraw--;
 	}
-
+	
+	// If we've drawn a golden row, reduce the amount left to draw
+	if ( goldenRows ) {
+		goldenRows--;
+	}
+	
 	// Update the location for the next row
 	nextY += gapY;
+}
+
+static function PowerupGoldenBalloons () {
+	
+	goldenRows = goldenRowCount;
 }
