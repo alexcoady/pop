@@ -2,25 +2,48 @@
 
 var maxSpeed:float = 10;
 var jumpScale:float = 6;
-private var jumping:boolean = false;
+var height:int = 0;
+
+var scoreSkin: GUISkin;
+
 
 function Start () {
 
 //	anim = GetComponent("Animator");
 }
 
-function FixedUpdate () {
+function Update () {
 
-	var move:float = Input.GetAxis("Horizontal");
-	rigidbody2D.velocity.x = move * maxSpeed;
+	var move:float;
+
+	// If gyroscope is available, use that mudda
+	if ( SystemInfo.supportsGyroscope ) {
+				
+	    move = Input.acceleration.x;
+	    // Speed this interaction up a bit
+	    move *= 2;
+	    		
+	} else {
 	
-	if( Input.GetKeyDown(KeyCode.Space) && jumping == false ) {
-		
-		Hop();
+		move = Input.GetAxis("Horizontal");
 	}
+
+	rigidbody2D.velocity.x = move * maxSpeed;
 }
 
 function Hop () {
 
 	rigidbody2D.velocity.y = rigidbody2D.gravityScale * jumpScale;
+}
+
+function RecordHeight () {
+
+	height = Mathf.Max( Mathf.Ceil( transform.position.y ), height );
+}
+
+function OnGUI () {
+
+	GUI.skin = scoreSkin;
+	
+	GUI.Label( new Rect( Screen.width - 150, 10, 140, 140 ), '' + height );
 }
